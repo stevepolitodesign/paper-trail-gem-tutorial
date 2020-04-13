@@ -15,4 +15,15 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
       assert_select "table tbody tr", count: 10
     end
   end
+
+  test "should display version" do
+    original_title = @article.title
+    with_versioning do
+      assert_equal 0, @article.versions.count
+      @article.update(title: "New Version")
+      assert_equal 1, @article.versions.count
+      get version_article_path(@article, @article.versions.first)
+      assert_match original_title, @response.body
+    end
+  end
 end
