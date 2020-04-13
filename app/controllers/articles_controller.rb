@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
-  before_action :set_article, only: [:show, :edit, :update, :destroy, :versions, :version]
-  before_action :set_version, only: [:version]
+  before_action :set_article, only: [:show, :edit, :update, :destroy, :versions, :version, :revert]
+  before_action :set_version, only: [:version, :revert]
 
   # GET /articles
   # GET /articles.json
@@ -67,6 +67,15 @@ class ArticlesController < ApplicationController
   end
 
   def version
+  end
+
+  def revert
+    @reverted_article = @version.reify
+    if @reverted_article.save
+      redirect_to @article, notice: "Article was successfully reverted."
+    else
+      render version
+    end
   end
 
   private
