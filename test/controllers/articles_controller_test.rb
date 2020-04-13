@@ -51,11 +51,29 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get versions if the only version is create" do
+    with_versioning do
+      @article = Article.create(title: "Version 1")
+      get versions_article_path(@article)
+      assert_response :success
+    end
+  end
+
   test "should get version" do
     with_versioning do
       @article.update(title: "New Version")
       get version_article_path(@article, @article.versions.last)
       assert_response :success
+    end
+  end
+
+  test "should revert version" do
+    with_versioning do
+      @article = Article.create(title: "Version 1")
+      @article.update(title: "Version 2")
+      post revert_article_path(@article, @article.versions.last)
+      assert_redirected_to article_path(@article)
+      assert_equal "Version 1", @article.reload.title
     end
   end
 end
