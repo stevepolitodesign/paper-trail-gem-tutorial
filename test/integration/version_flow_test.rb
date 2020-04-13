@@ -26,4 +26,16 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
       assert_match original_title, @response.body
     end
   end
+
+  test "should revert version" do
+    with_versioning do
+      @article = Article.create(title: "Version 1")
+      @article.update(title: "Version 2")
+      get version_article_path(@article, @article.versions.last)
+      assert_select "a", text: "Revert to this version", href: revert_article_path(@article, @article.versions.last)
+      post revert_article_path(@article, @article.versions.last)
+      get article_path(@article)
+      assert_match "Version 1", @response.body
+    end
+  end
 end
