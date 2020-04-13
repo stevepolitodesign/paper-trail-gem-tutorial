@@ -1,10 +1,8 @@
-<% @articles.each do |article| %>
-    <tr>
-    <td><%= article.title %></td>
-    <td><%= article.body %></td>
-    <td><%= link_to 'Show', article %></td>
+<tr>
+    <td><%= article.try(:reify) ? article.reify.title : article.title %></td>
+    <td><%= article.try(:reify)  ? article.reify.body : article.body %></td>
+    <td><%= link_to 'Show', article_path(article) %></td>
     <td><%= link_to 'Edit', edit_article_path(article) %></td>
     <td><%= link_to 'Versions', versions_article_path(article) %></td>
-    <td><%= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    </tr>
-<% end %>
+    <td><%= link_to 'Destroy', article_path(article), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+</tr>
