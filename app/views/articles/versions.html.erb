@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1><%= @article.title %> Versions</h1>
+<h1>Previous Versions</h1>
 
 <table>
   <thead>
@@ -12,6 +12,6 @@
   </thead>
 
   <tbody>
-    <%= render @articles %>
+    <%= render partial: "article", collection: @articles %>
   </tbody>
 </table>
