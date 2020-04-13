@@ -1,13 +1,15 @@
-<tr>
-    <td><%= article.try(:reify) ? article.reify.title : article.title %></td>
-    <td><%= article.try(:reify)  ? article.reify.body : article.body %></td>
-    <% if params[:action] == "index" %>
-        <td><%= link_to 'Show', article_path(article) %></td>
-        <td><%= link_to 'Edit', edit_article_path(article) %></td>
-        <td><%= link_to 'Versions', versions_article_path(article) %></td>
-        <td><%= link_to 'Destroy', article_path(article), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    <% end %>
-    <% if params[:action] == "versions" %>
-        <td><%= link_to 'Preview This Version', version_article_path(@article, article) %></td>
-    <% end %>
-</tr>
+<% unless article.try(:event) && article.event == "create" %>
+    <tr>
+        <td><%= article.try(:reify) ? article.reify.title : article.title %></td>
+        <td><%= article.try(:reify)  ? article.reify.body : article.body %></td>
+        <% if params[:action] == "index" %>
+            <td><%= link_to 'Show', article_path(article) %></td>
+            <td><%= link_to 'Edit', edit_article_path(article) %></td>
+            <td><%= link_to 'Versions', versions_article_path(article) %></td>
+            <td><%= link_to 'Destroy', article_path(article), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+        <% if params[:action] == "versions" %>
+            <td><%= link_to 'Preview This Version', version_article_path(@article, article) %></td>
+        <% end %>
+    </tr>
+<% end %>
