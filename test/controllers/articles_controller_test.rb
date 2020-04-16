@@ -76,4 +76,12 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
       assert_equal "Version 1", @article.reload.title
     end
   end
+
+  test "should get deleted" do
+    with_versioning do
+      Article.destroy_all
+      get deleted_articles_path
+      assert_response :success
+    end
+  end
 end
