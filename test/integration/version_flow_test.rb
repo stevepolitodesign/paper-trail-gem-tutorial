@@ -49,7 +49,6 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
       Article.destroy_all
       assert_equal 0, Article.count
       get deleted_articles_path
-      assert_respose :success
       assert_select "table tbody tr", count: 5
     end
   end
