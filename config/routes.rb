@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       get "versions", to: "articles#versions"
       get "version/:version_id", to: "articles#version", as: "version"
       post "revert/:version_id", to: "articles#revert", as: "revert"
+      post "restore/:version_id", to: "articles#restore", as: "restore"
     end
     collection do
       get "deleted", to: "articles#deleted"
