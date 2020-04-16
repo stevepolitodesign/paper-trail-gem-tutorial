@@ -38,4 +38,19 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
       assert_match "Version 1", @response.body
     end
   end
+
+  test "should display deleted articles" do
+    Article.destroy_all
+    with_versioning do
+      5.times do |n|
+        Article.create(title: "Article #{n + 1}", body: "Some text")
+      end
+      assert_equal 5, Article.count
+      Article.destroy_all
+      assert_equal 0, Article.count
+      get deleted_articles_path
+      assert_respose :success
+      assert_select "table tbody tr", count: 5
+    end
+  end
 end
