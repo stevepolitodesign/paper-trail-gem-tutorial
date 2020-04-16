@@ -69,6 +69,7 @@ class ArticlesController < ApplicationController
   def version
   end
 
+  
   def revert
     @reverted_article = @version.reify
     if @reverted_article.save
@@ -76,6 +77,10 @@ class ArticlesController < ApplicationController
     else
       render version
     end
+  end
+  
+  def deleted
+    @articles = PaperTrail::Version.where(item_type: "Article", event: "destroy")
   end
 
   private
