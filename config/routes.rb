@@ -6,6 +6,9 @@ Rails.application.routes.draw do
       get "version/:version_id", to: "articles#version", as: "version"
       post "revert/:version_id", to: "articles#revert", as: "revert"
     end
+    collection do
+      get "deleted", to: "articles#deleted"
+    end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
