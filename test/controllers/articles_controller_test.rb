@@ -84,4 +84,14 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
     end
   end
+
+  test "should restore article" do
+    with_versioning do
+      @article.destroy
+      assert_difference("Article.count") do
+        @version = PaperTrail::Version.where(item_type: "Article", event: "destroy").last
+        post restore_article_path(@article, @version)
+      end
+    end
+  end
 end
