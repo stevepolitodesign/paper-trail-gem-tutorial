@@ -64,4 +64,13 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
       assert_match "Article was successfully restored.", @response.body
     end
   end
+
+  test "should not render previously destroyed articles once restored" do
+    with_versioning do
+      @article.destroy
+      post restore_article_path(@article)
+      get deleted_articles_path
+      assert_select "a", href: restore_article_path(@article), count: 0
+    end
+  end
 end
