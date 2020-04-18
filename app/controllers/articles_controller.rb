@@ -79,18 +79,21 @@ class ArticlesController < ApplicationController
   end
 
   def deleted
+    # TODO Limit this to query to include only articles where the last event was destroy.
     @articles = PaperTrail::Version.where(item_type: "Article", event: "destroy")
   end
 
   def restore
-    @version = Article.new(id: params[:id]).versions.last
-    @article = @version.reify
-    if @article.save
-      redirect_to @article, notice: "Article was successfully restored."
-      # TODO Consider not deleting the version
-      @version.destroy
-    else
-      render "deleted"
+    @article = Article.new(id: params[:id])
+    @versions = @article.versions
+    @latest_version = @versions.last
+    if @latest_version.event == "destroy"
+      @article = @latest_version.reify
+      if @article.save
+        redirect_to @article, notice: "Article was successfully restored."
+      else
+        render "deleted"
+      end
     end
   end
 

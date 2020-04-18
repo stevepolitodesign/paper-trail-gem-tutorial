@@ -89,9 +89,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     with_versioning do
       @article.destroy
       assert_difference("Article.count") do
-        assert_difference("PaperTrail::Version.where(event: 'destroy').count", -1) do
-          post restore_article_path(@article)
-        end
+        post restore_article_path(@article)
       end
     end
   end
