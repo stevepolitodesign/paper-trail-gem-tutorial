@@ -79,7 +79,7 @@ class ArticlesController < ApplicationController
   end
 
   def deleted
-    # TODO Limit this to query to include only articles where the last event was destroy.
+    # OPTIMIZE Is this an expensive query?
     @articles = PaperTrail::Version.where(item_type: "Article", event: "destroy").filter { |v| v.reify.versions.last.event == "destroy" }
   end
 
