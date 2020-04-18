@@ -73,4 +73,14 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
       assert_select "a", href: restore_article_path(@article), count: 0
     end
   end
+
+  test "should display latest destroyed article on destroy view" do
+    with_versioning do
+      @article.destroy
+      post restore_article_path(@article)
+      @article.destroy
+      get deleted_articles_path
+      assert_select "a", href: restore_article_path(@article), count: 1
+    end
+  end
 end
