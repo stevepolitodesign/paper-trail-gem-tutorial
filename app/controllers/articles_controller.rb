@@ -69,7 +69,6 @@ class ArticlesController < ApplicationController
   def version
   end
 
-  
   def revert
     @reverted_article = @version.reify
     if @reverted_article.save
@@ -78,9 +77,20 @@ class ArticlesController < ApplicationController
       render version
     end
   end
-  
+
   def deleted
     @articles = PaperTrail::Version.where(item_type: "Article", event: "destroy")
+  end
+
+  def restore
+    @version = Article.new(id: params[:id]).versions.last
+    @article = @version.reify
+    if @article.save
+      redirect_to @article, notice: "Article was successfully restored."
+      @version.destroy
+    else
+      render "deleted"
+    end
   end
 
   private
@@ -91,7 +101,7 @@ class ArticlesController < ApplicationController
   end
 
   def set_version
-    @version = PaperTrail::Version.find_by(item_id: @article.id, id: params[:version_id])
+    @version = PaperTrail::Version.find_by(item_id: @article, id: params[:version_id])
   end
 
   # Only allow a list of trusted parameters through.
