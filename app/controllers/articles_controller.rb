@@ -84,9 +84,7 @@ class ArticlesController < ApplicationController
   end
 
   def restore
-    @article = Article.new(id: params[:id])
-    @versions = @article.versions
-    @latest_version = @versions.last
+    @latest_version = Article.new(id: params[:id]).versions.last
     if @latest_version.event == "destroy"
       @article = @latest_version.reify
       if @article.save
