@@ -11,5 +11,8 @@
         <% if params[:action] == "versions" %>
             <td><%= link_to 'Preview This Version', version_article_path(@article, article) %></td>
         <% end %>
+        <% if params[:action] == "deleted" %>
+            <td><%= link_to 'Restore This Article', restore_article_path(article.reify), method: :post %></td>
+        <% end %>        
     </tr>
 <% end %>
