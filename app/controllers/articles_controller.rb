@@ -87,6 +87,7 @@ class ArticlesController < ApplicationController
     @article = @version.reify
     if @article.save
       redirect_to @article, notice: "Article was successfully restored."
+      # TODO Consider not deleting the version
       @version.destroy
     else
       render "deleted"
