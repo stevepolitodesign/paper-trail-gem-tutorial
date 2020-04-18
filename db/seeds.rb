@@ -6,6 +6,10 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-25.times do |i|
-  Article.create(title: Faker::Lorem.sentence, body: Faker::Lorem.paragraph)
+@article = Article.create(title: "Version 1", body: Faker::Lorem.paragraph)
+2.upto(6) do |i|
+  @article = Article.update(title: "Version #{i}")
 end
+
+@deleted_article = Article.create(title: "Deleted Article", body: Faker::Lorem.paragraph)
+@deleted_article.destroy
