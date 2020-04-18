@@ -52,4 +52,16 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
       assert_select "table tbody tr", count: 5
     end
   end
+
+  test "should restore deleted article" do
+    with_versioning do
+      @article.destroy
+      get deleted_articles_path
+      assert_select "a", href: restore_article_path(@article)
+      post restore_article_path(@article)
+      assert_redirected_to article_path(@article)
+      follow_redirect!
+      assert_match "Article was successfully restored.", @response.body
+    end
+  end
 end
