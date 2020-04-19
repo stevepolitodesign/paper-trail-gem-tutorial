@@ -11,5 +11,9 @@
   @article = Article.update(title: "Version #{i}")
 end
 
-@deleted_article = Article.create(title: "Deleted Article", body: Faker::Lorem.paragraph)
+@deleted_article = Article.create(title: "Deleted Article Verion 1", body: Faker::Lorem.paragraph)
+@deleted_article.destroy
+@deleted_article = Article.new(id: @deleted_article.id).versions.last.reify
+@deleted_article.save
+@deleted_article.update(title: "Deleted Article Verion 2")
 @deleted_article.destroy
