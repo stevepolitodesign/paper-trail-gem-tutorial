@@ -80,7 +80,7 @@ class ArticlesController < ApplicationController
 
   def deleted
     # OPTIMIZE Is this an expensive query?
-    @articles = PaperTrail::Version.where(item_type: "Article", event: "destroy").map(&:reify).reverse.uniq(&:id)
+    @articles = PaperTrail::Version.where(item_type: "Article", event: "destroy").filter { |v| v.reify.versions.last.event == "destroy" }.map(&:reify).reverse.uniq(&:id)
   end
 
   def restore
