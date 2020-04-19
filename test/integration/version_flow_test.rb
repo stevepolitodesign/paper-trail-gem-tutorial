@@ -74,17 +74,22 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should display latest destroyed article on destroy view" do
-    @article.update(title: "Version 1")
+  test "should limit display to lastest destroyed version per article" do
+    Article.destroy_all
     with_versioning do
-      @article.destroy
-      post restore_article_path(@article)
-      @article = Article.find(@article.id)
-      @article.update(title: "Version 2")
-      @article.destroy
+      1.upto(2) do |i|
+        @deleted_article = Article.create(title: "Deleted Article #{i} Verion 1", body: Faker::Lorem.paragraph)
+        @deleted_article.destroy
+        @deleted_article = Article.new(id: @deleted_article.id).versions.last.reify
+        @deleted_article.save
+        @deleted_article.update(title: "Deleted Article #{i} 2")
+        @deleted_article.destroy
+      end
       get deleted_articles_path
-      assert_select "a", href: restore_article_path(@article), count: 1
-      assert_select "td", text: "Version 2", count: 1
+      Article.all.each do |a|
+        assert_select "a", href: restore_article_path(1), count: 1
+        assert_select "td", text: a.title.to_s, count: 1
+      end
     end
   end
 end
