@@ -91,4 +91,15 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
       end
     end
   end
+
+  test "should not display deleted versions on versions page" do
+    with_versioning do
+      @restored_article = Article.create(title: "A Previously Deleted Article", body: Faker::Lorem.paragraph)
+      @restored_article.destroy
+      @restored_article = Article.new(id: @restored_article.id).versions.last.reify
+      @restored_article.save
+      get versions_article_path(@article)
+      assert_select "table tbody tr", count: 0
+    end
+  end
 end
