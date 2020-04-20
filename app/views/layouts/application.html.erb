@@ -11,6 +11,10 @@
 
   <body>
     <%# TODO Add a simple navigation %>
+    <nav>
+      <%= link_to "Home", root_path %>
+      <%= link_to "Deleted Articles", deleted_articles_path %>
+    </nav>
     <%= yield %>
   </body>
 </html>
