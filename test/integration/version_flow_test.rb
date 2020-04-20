@@ -78,18 +78,23 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
     Article.destroy_all
     with_versioning do
       1.upto(2) do |i|
-        @deleted_article = Article.create(title: "Deleted Article #{i} Verion 1", body: Faker::Lorem.paragraph)
+        @deleted_article = Article.create(title: "Deleted Article #{i} Version 1", body: Faker::Lorem.paragraph)
         @deleted_article.destroy
         @deleted_article = Article.new(id: @deleted_article.id).versions.last.reify
         @deleted_article.save
-        @deleted_article.update(title: "Deleted Article #{i} 2")
+        @deleted_article.update(title: "Deleted Article #{i} Version 2")
         @deleted_article.destroy
       end
-      get deleted_articles_path
-      Article.all.each do |a|
-        assert_select "a", href: restore_article_path(1), count: 1
-        assert_select "td", text: a.title.to_s, count: 1
+      Article.all.each do |article|
+        assert_select "a[href=?]", restore_article_path(article), count: 1
+        assert_select "td", text: article.title.to_s, count: 1
       end
+      @restored_article = Article.create(title: "A Previously Deleted Article")
+      @restored_article.destroy
+      post restore_article_path(@restored_article)
+      get deleted_articles_path
+      assert_select "a[href=?]", restore_article_path(@restored_article), count: 0
+      assert_select "td", text: @restored_article.title, count: 0
     end
   end
 end
