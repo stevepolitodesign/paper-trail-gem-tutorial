@@ -1,4 +1,4 @@
-<% unless article.try(:event) && article.event == "create" %>
+<% unless article.try(:event) && (article.event == "create" || article.event == "destroy") %>
     <tr>
         <td><%= article.try(:reify) ? article.reify.title : article.title %></td>
         <td><%= article.try(:reify)  ? article.reify.body : article.body %></td>
