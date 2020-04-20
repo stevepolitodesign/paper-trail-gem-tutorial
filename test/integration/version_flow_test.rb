@@ -32,7 +32,7 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
       @article = Article.create(title: "Version 1")
       @article.update(title: "Version 2")
       get version_article_path(@article, @article.versions.last)
-      assert_select "a", text: "Revert to this version", href: revert_article_path(@article, @article.versions.last)
+      assert_select "a[href=?]", revert_article_path(@article, @article.versions.last), text: "Revert to this version"
       post revert_article_path(@article, @article.versions.last)
       get article_path(@article)
       assert_match "Version 1", @response.body
@@ -57,7 +57,7 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
     with_versioning do
       @article.destroy
       get deleted_articles_path
-      assert_select "a", href: restore_article_path(@article)
+      assert_select "a[href=?]", restore_article_path(@article)
       post restore_article_path(@article)
       assert_redirected_to article_path(@article)
       follow_redirect!
@@ -70,7 +70,7 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
       @article.destroy
       post restore_article_path(@article)
       get deleted_articles_path
-      assert_select "a", href: restore_article_path(@article), count: 0
+      assert_select "a[href=?]", restore_article_path(@article), count: 0
     end
   end
 
@@ -86,7 +86,7 @@ class VersionFlowTest < ActionDispatch::IntegrationTest
         @deleted_article.destroy
       end
       Article.all.each do |article|
-        assert_select "a", href: restore_article_path(article), count: 1
+        assert_select "a[href=?]", restore_article_path(article), count: 1
         assert_select "td", text: article.title.to_s, count: 1
       end
     end
