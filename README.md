@@ -4,11 +4,11 @@ A tutorial that demonstrates how to revert and restore records using [paper_trai
 
 ## Revert a Previous Version
 
-![reverting a pervious version](./public/revert.gif)
+![reverting a pervious version](./public/revert_article.gif)
 
 ## Restoring a Previously Deleted Version
 
-![restoring a perviously deleted version](./public/restore.gif)
+![restoring a perviously deleted version](./public/restore_article.gif)
 
 # Local Build
 
