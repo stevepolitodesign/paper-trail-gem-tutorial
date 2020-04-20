@@ -20,7 +20,7 @@ end
   @deleted_article.destroy
 end
 
-@restored_article = Article.create(title: "A Previously Deleted Article")
+@restored_article = Article.create(title: "A Previously Deleted Article", body: Faker::Lorem.paragraph)
 @restored_article.destroy
 @restored_article = Article.new(id: @restored_article.id).versions.last.reify
 @restored_article.save
